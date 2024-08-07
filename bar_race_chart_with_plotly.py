@@ -43,13 +43,14 @@ df_long['Continent'] = df_long['Country'].map(country_to_continent)
 df_long['Color'] = df_long['Continent'].map(colors)
 
 # Create the animated bar chart race
-fig = px.bar(df_long,
-             x='Pollution Level',
-             y='Country',
+fig = px.line(df_long,
+             x='Year',
+             y='Pollution Level',
              color='Continent',
-             animation_frame='Year',
-             animation_group='Country',
-             range_x=[0, df_long['Pollution Level'].max() + 10],
+             animation_frame='Country',
+             animation_group='Year',
+             range_x=[df_long['Year'].min(), df_long['Year'].max()],
+             range_y=[0, df_long['Pollution Level'].max() + 5],
              color_discrete_map=colors,
 
              title='Air Pollution Levels Over Time')
