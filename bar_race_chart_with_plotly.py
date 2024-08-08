@@ -69,10 +69,10 @@ fig, ax = plt.subplots()
 def update(frame):
     ax.clear()
     ax.axis('equal')
-    pollution = df_long.groupby("Year")["Pollution Level"].apply(list)[test]
-    names = df_long.groupby("Year")["Country"].apply(list)[test]
+    pollution = df_long.groupby("Year")["Pollution Level"].apply(list)[frame]
+    names = df_long.groupby("Year")["Country"].apply(list)[frame]
     ax.pie(pollution, labels=names, colors=rgba_col, explode=exp)
-    ax.set_title("placeholder")
+    ax.set_title(frame)
 
-ani = FuncAnimation(fig, update, frames=range(1950,2020), repeat=False)
+ani = FuncAnimation(fig, update, frames=range(1950,2023), repeat=False)
 plt.show()
