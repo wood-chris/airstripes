@@ -1,5 +1,7 @@
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
+import random
+from matplotlib.animation import FuncAnimation
 
 # Read the Excel file into a DataFrame
 file_path = 'combined_city_data_format1.xlsx'  # Update with your file path
@@ -35,6 +37,7 @@ colors = {
     'South America': 'purple',
     'Africa': 'orange',
     'Oceania': 'pink'
+
 }
 
 # Create a mapping of countries to their respective colors
@@ -42,23 +45,34 @@ country_to_continent = {country: continent for continent, countries in selected_
 df_long['Continent'] = df_long['Country'].map(country_to_continent)
 df_long['Color'] = df_long['Continent'].map(colors)
 
-# Create the animated bar chart race
-fig = px.line(df_long,
-             x='Year',
-             y='Pollution Level',
-             color='Continent',
-             animation_frame='Country',
-             animation_group='Year',
-             range_x=[df_long['Year'].min(), df_long['Year'].max()],
-             range_y=[0, df_long['Pollution Level'].max() + 5],
-             color_discrete_map=colors,
+year = 1950
+colours = df_long.groupby("Year")["Color"].apply(list)[year]
+rgba_col = []
+for colour in colours:
+    if colour == "blue":
+        rgba_col.append([0,0,1,random.uniform(0.5,1)])
+    elif colour == "green":
+        rgba_col.append([0,1,0,random.uniform(0.5,1)])
+    elif colour == "red":
+        rgba_col.append([1,0,0,random.uniform(0.5,1)])
+    elif colour == "orange":
+        rgba_col.append([1,0.4,0,random.uniform(0.5,1)])
+    elif colour == "purple":
+        rgba_col.append([1,0.2,1,random.uniform(0.5,1)])
+    elif colour == "pink":
+        rgba_col.append([1,0.1,0.4,random.uniform(0.5,1)])
+exp = [0.05 for x in range(len(rgba_col)) ]
 
-             title='Air Pollution Levels Over Time')
 
-fig.update_layout(barmode='stack', yaxis={'categoryorder':'total ascending'})
+fig, ax = plt.subplots()
 
-# Display the animation
-fig.show()
+def update(frame):
+    ax.clear()
+    ax.axis('equal')
+    pollution = df_long.groupby("Year")["Pollution Level"].apply(list)[test]
+    names = df_long.groupby("Year")["Country"].apply(list)[test]
+    ax.pie(pollution, labels=names, colors=rgba_col, explode=exp)
+    ax.set_title("placeholder")
 
-# Save the animation to an HTML file
-fig.write_html('../racechart.html')
+ani = FuncAnimation(fig, update, frames=range(1950,2020), repeat=False)
+plt.show()
